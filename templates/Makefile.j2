@@ -1,0 +1,35 @@
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:={{ name_sanitized }}
+PKG_VERSION:={{ version }}
+PKG_RELEASE:={{ release }}
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/{{ name_sanitized }}
+  SECTION:=base
+  CATEGORY:=Network Profiles
+  TITLE:={{ name }}
+  URL:=https://github.com/libremesh/network-profiles/
+{% if packages -%}
+  DEPENDS:={{ packages }}
+{%- endif %}
+endef
+
+
+define Package/{{ name_sanitized }}/description
+ {{ readme }}
+endef
+
+define Build/Compile
+endef
+
+define Build/Configure
+endef
+
+define Package/{{ name_sanitized }}/install
+		$(INSTALL_DIR) $(1)/
+		$(CP) ./{{ name }} $(1)/
+endef
+
+$(eval $(call BuildPackage,{{ name_sanitized }}))
