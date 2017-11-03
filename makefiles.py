@@ -3,6 +3,26 @@ import subprocess
 from jinja2 import Environment, FileSystemLoader
 
 network_profiles_folder = "network-profiles"
+sdk_folder = "sdk"
+
+def run_sdk():
+    cmdlines = [
+        "perl scripts/feeds update profiles",
+        "perl scripts/feeds install -a -p profiles",
+        "make"
+    ]
+    for cmdline in cmdlines:
+        print("run", cmdline.split(" "))
+        proc = subprocess.Popen(
+                cmdline.split(" "),
+                cwd=sdk_folder,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                shell=False
+        )
+        output, error = proc.communicate()
+        return_code = proc.returncode
+        print(output.decode("utf-8"))
 
 def load_profiles():
     network_profiles = {}
@@ -52,9 +72,11 @@ def create_makefile(network_profiles):
             with open(version_file_path, "w") as version_file:
                 version_file.write(git_version)
 
-        if git_version == current_version and not True:
+        if git_version == current_version:
             print("{} is up to date".format(community))
             continue
+
+        changes = 1
 
         community_readme = ""
         readme_file_path = os.path.join(network_profiles_folder, community, "README.md")
@@ -110,7 +132,9 @@ def create_makefile(network_profiles):
 
         print("created Makefile for {}".format(community))
 
+changes = 0
 pull_profiles()
 network_profiles = load_profiles()
 create_makefile(network_profiles)
-print("all profiles updated")
+if changes:
+    run_sdk()
