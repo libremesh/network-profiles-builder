@@ -1,24 +1,23 @@
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:={{ name_sanitized }}
+PKG_NAME:=np-{{ community }}
 PKG_VERSION:={{ version }}
 PKG_RELEASE:={{ release }}
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/{{ name_sanitized }}
+{% for profile in profiles %}
+define Package/np-{{ community }}-{{ profile["name_sanitized"] }}
   SECTION:=base
   CATEGORY:=Network Profiles
-  TITLE:={{ name }}
+  TITLE:={{ profile["name"] }}
   URL:=https://github.com/libremesh/network-profiles/
-{% if packages -%}
-  DEPENDS:={{ packages }}
-{%- endif %}
+  {% if profile["packages"] %}DEPENDS:={{ profile["packages"] }}{% endif %}
 endef
 
-
-define Package/{{ name_sanitized }}/description
- {{ readme }}
+define Package/np-{{ community }}-{{ profile["name_sanitized"] }}/description
+  Network profile of {{ community }}
+  {% if profile["readme"] %}{{ profile["readme"] }}{% endif %}
 endef
 
 define Build/Compile
@@ -27,9 +26,11 @@ endef
 define Build/Configure
 endef
 
-define Package/{{ name_sanitized }}/install
+define Package/np-{{ community }}-{{ profile["name_sanitized"] }}/install
 		$(INSTALL_DIR) $(1)/
-		$(CP) ./{{ name }} $(1)/
+		$(CP) ./{{ profile["name"] }} $(1)/
 endef
+{% endfor %}
 
-$(eval $(call BuildPackage,{{ name_sanitized }}))
+{%- for profile in profiles %}
+$(eval $(call BuildPackage,np-{{ community }}-{{ profile["name_sanitized"] }})){% endfor -%}
