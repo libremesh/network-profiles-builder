@@ -12,6 +12,7 @@ define Package/np-{{ community }}-{{ profile["name_sanitized"] }}
   CATEGORY:=Network Profiles
   TITLE:={{ profile["name"] }}
   URL:=https://github.com/libremesh/network-profiles/
+  PKGARCH:=all
   {% if profile["packages"] %}DEPENDS:={{ profile["packages"] }}{% endif %}
 endef
 
