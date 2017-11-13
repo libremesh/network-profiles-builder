@@ -51,7 +51,7 @@ def pull_profiles():
 def create_makefile(network_profiles):
     for community, profiles in network_profiles.items():
         params = {}
-        params["community"] = community
+        params["community"] = community.lower()
         cmdline = "git log -n 1 --pretty=format:%H -- .".split(" ")
         proc = subprocess.Popen(
                 cmdline,
@@ -89,8 +89,8 @@ def create_makefile(network_profiles):
 
         for profile in profiles:
             profile_data = {}
-            profile_data["name"] = profile
-            profile_data["name_sanitized"] = profile.replace("/", "-").replace(".", "_")
+            profile_data["name"] = profile.lower()
+            profile_data["name_sanitized"] = profile.replace("/", "-").replace(".", "_").lower()
 
             packages_file_path = os.path.join(network_profiles_folder, community, profile, "PACKAGES")
             if os.path.exists(packages_file_path):
