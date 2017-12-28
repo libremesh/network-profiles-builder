@@ -1,13 +1,13 @@
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=np-{{ community }}
+PKG_NAME:=zz-{{ community }}
 PKG_VERSION:={{ version }}
 PKG_RELEASE:={{ release }}
 
 include $(INCLUDE_DIR)/package.mk
 
 {% for profile in profiles %}
-define Package/np-{{ community }}-{{ profile["name_sanitized"] }}
+define Package/zz-{{ community }}-{{ profile["name_sanitized"] }}
   SECTION:=base
   CATEGORY:=Network Profiles
   TITLE:={{ profile["name"] }}
@@ -16,7 +16,7 @@ define Package/np-{{ community }}-{{ profile["name_sanitized"] }}
   {% if profile["packages"] %}DEPENDS:={{ profile["packages"] }}{% endif %}
 endef
 
-define Package/np-{{ community }}-{{ profile["name_sanitized"] }}/description
+define Package/zz-{{ community }}-{{ profile["name_sanitized"] }}/description
   Network profile of {{ community }}
   {% if profile["readme"] %}{{ profile["readme"] }}{% endif %}
 endef
@@ -27,11 +27,11 @@ endef
 define Build/Configure
 endef
 
-define Package/np-{{ community }}-{{ profile["name_sanitized"] }}/install
+define Package/zz-{{ community }}-{{ profile["name_sanitized"] }}/install
 		$(INSTALL_DIR) $(1)/
 		$(CP) ./{{ profile["name"] }} $(1)/
 endef
 {% endfor %}
 
 {%- for profile in profiles %}
-$(eval $(call BuildPackage,np-{{ community }}-{{ profile["name_sanitized"] }})){% endfor -%}
+$(eval $(call BuildPackage,zz-{{ community }}-{{ profile["name_sanitized"] }})){% endfor -%}
