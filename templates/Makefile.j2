@@ -29,7 +29,7 @@ endef
 
 define Package/zz-{{ community }}-{{ profile["name_sanitized"] }}/install
 		$(INSTALL_DIR) $(1)/
-		$(CP) ./{{ profile["name"] }} $(1)/
+		$(CP) -r ./{{ profile["name"] }}/* $(1)/
 endef
 {% endfor %}
 

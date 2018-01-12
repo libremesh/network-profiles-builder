@@ -4,12 +4,13 @@ from jinja2 import Environment, FileSystemLoader
 
 network_profiles_folder = "network-profiles"
 sdk_folder = "sdk"
+changes = 0
 
 def run_sdk():
     cmdlines = [
         "perl scripts/feeds update profiles",
         "perl scripts/feeds install -a -p profiles",
-        "make"
+        "make -j5"
     ]
     for cmdline in cmdlines:
         print("run", cmdline.split(" "))
@@ -49,6 +50,7 @@ def pull_profiles():
         )
 
 def create_makefile(network_profiles):
+    global changes
     for community, profiles in network_profiles.items():
         params = {}
         params["community"] = community.lower()
@@ -132,7 +134,6 @@ def create_makefile(network_profiles):
 
         print("created Makefile for {}".format(community))
 
-changes = 0
 pull_profiles()
 network_profiles = load_profiles()
 create_makefile(network_profiles)
