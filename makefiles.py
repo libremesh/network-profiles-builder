@@ -1,4 +1,5 @@
 import os
+import re
 import subprocess
 from jinja2 import Environment, FileSystemLoader
 
@@ -50,6 +51,7 @@ def pull_profiles():
         )
 
 def create_makefile(network_profiles):
+    p = re.compile("\W")
     global changes
     for community, profiles in network_profiles.items():
         params = {}
@@ -92,7 +94,7 @@ def create_makefile(network_profiles):
         for profile in profiles:
             profile_data = {}
             profile_data["name"] = profile.lower()
-            profile_data["name_sanitized"] = profile.replace("/", "-").replace(".", "_").lower()
+            profile_data["name_sanitized"] = p.sub("_", profile.replace("/", "-").lower())
 
             packages_file_path = os.path.join(network_profiles_folder, community, profile, "PACKAGES")
             if os.path.exists(packages_file_path):
