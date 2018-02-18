@@ -82,6 +82,9 @@ def create_makefile(network_profiles):
 
         changes = 1
 
+        with open(version_file_path, "w") as version_file:
+            version_file.write(git_version)
+
         community_readme = ""
         readme_file_path = os.path.join(network_profiles_folder, community, "README.md")
         if os.path.exists(readme_file_path):
