@@ -9,9 +9,11 @@
 # create output directory
 mkdir -p ./packages
 
-for community in $(ls ./network-profiles); do
+for community_org in $(ls ./network-profiles); do
     # skip non directories
-    [ -d "./network-profiles/$community" ] || continue
+    [ -d "./network-profiles/$community_org" ] || continue
+
+    community="$(echo $community_org | sed -e s/[^A-Za-z0-9\-]/_/g)"
 
     # create network profile folder
     mkdir -p "./packages/$community"
@@ -25,20 +27,23 @@ for community in $(ls ./network-profiles); do
         "./packages/$community/Makefile"
 
     # loop over all profiles of community
-    for profile in $(ls ./network-profiles/$community); do
+    for profile_org in $(ls ./network-profiles/$community_org); do
         # skip non directories
-        [ -d "./network-profiles/$community/$profile" ] || continue
+        [ -d "./network-profiles/$community_org/$profile_org" ] || continue
+
+        profile="$(echo $profile_org | sed -e s/[^A-Za-z0-9\-]/_/g)"
 
         # copy all profile specific files
-        cp -r "./network-profiles/$community/$profile/" "./packages/$community/$profile"
+        cp -r "./network-profiles/$community_org/$profile_org/" \
+            "./packages/$community/$profile"
         
         # if special packages are required for the profile parse them here
         packages=""
-        [ -e "./packages/$community/$profile/PACKAGES" ] && {
-            packages="$(cat ./packages/$community/$profile/PACKAGES)"
-            # replace \n with a whitespace
-            packages="${packages//$'\n'/ }"
-        } 
+        #[ -e "./packages/$community/$profile/PACKAGES" ] && {
+        #    packages="$(cat ./packages/$community/$profile/PACKAGES)"
+        #    # replace \n with a whitespace
+        #    packages="${packages//$'\n'/ }"
+        #}
 
         sed \
             -e "s/{{ community }}/$community/g" \

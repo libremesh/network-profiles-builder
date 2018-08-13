@@ -9,7 +9,7 @@ endef
 
 define Package/{{ community }}-{{ profile }}/install
 		$(INSTALL_DIR) $(1)/
-		$(CP) -r ./{{ community }}/{{ profile }}/* $(1)/
+		$(CP) -r ./{{ profile }}/* $(1)/
 endef
 
 $(eval $(call BuildPackage,{{ community }}-{{ profile }}))
