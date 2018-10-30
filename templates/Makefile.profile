@@ -5,6 +5,7 @@ define Package/{{ community }}-{{ profile }}
   URL:=https://github.com/libremesh/network-profiles/
   PKGARCH:=all
   DEPENDS:=lime-system {{ packages }}
+  PROVIDES:=libremesh-profile
 endef
 
 define Package/{{ community }}-{{ profile }}/install
