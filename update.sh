@@ -4,7 +4,16 @@
 [ -d "./network-profiles" ] || git clone https://github.com/libremesh/network-profiles.git
 
 # update the network-profiles
-#(cd ./network-profiles && git pull)
+
+touch .network_profiles_commit
+git --git-dir=network-profiles/.git/ pull
+latest_commit="$(git --git-dir=network-profiles/.git/ log --pretty=format:'%h' -n 1)"
+if [ "$latest_commit" != "$(cat .network_profiles_commit)" ]; then
+       echo "$latest_commit" > .network_profiles_commit
+else
+       echo "no updates"
+       exit 0
+fi
 
 # create output directory
 mkdir -p ./packages
@@ -53,3 +62,7 @@ for community_org in $(ls ./network-profiles); do
     done
 done
 
+(cd sdk && \
+       ./scripts/feeds update -a && \
+       ./scripts/feeds install -p networkprofiles -a && \
+       make -j 4)
