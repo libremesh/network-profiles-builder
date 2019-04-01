@@ -48,11 +48,14 @@ for community_org in $(ls ./network-profiles); do
         
         # if special packages are required for the profile parse them here
         packages=""
-        #[ -e "./packages/$community/$profile/PACKAGES" ] && {
-        #    packages="$(cat ./packages/$community/$profile/PACKAGES)"
-        #    # replace \n with a whitespace
-        #    packages="${packages//$'\n'/ }"
-        #}
+        [ -e "./packages/$community/$profile/PACKAGES" ] && {
+            for p in $(cat ./packages/$community/$profile/PACKAGES); do
+              # negative packages are discarted
+              packages="$packages $(echo -n "$p" | grep -v "^-")"
+            done
+            # replace \n with a whiespace
+            # packages="${packages//$'\n'/ }"
+        }
 
         sed \
             -e "s/{{ community }}/$community/g" \
