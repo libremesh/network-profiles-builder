@@ -8,11 +8,11 @@
 touch .network_profiles_commit
 git --git-dir=network-profiles/.git/ pull
 latest_commit="$(git --git-dir=network-profiles/.git/ log --pretty=format:'%h' -n 1)"
-if [ "$latest_commit" != "$(cat .network_profiles_commit)" ]; then
-       echo "$latest_commit" > .network_profiles_commit
+if [ "$latest_commit" != "$(cat .network_profiles_commit)" -o -n "$FORCE_REBUILD" ]; then
+    echo "$latest_commit" > .network_profiles_commit
 else
-       echo "no updates"
-       exit 0
+    echo "no updates"
+    exit 0
 fi
 
 # create output directory
@@ -45,7 +45,7 @@ for community_org in $(ls ./network-profiles); do
         # copy all profile specific files
         cp -r "./network-profiles/$community_org/$profile_org/" \
             "./packages/$community/$profile"
-        
+
         # if special packages are required for the profile parse them here
         packages=""
         [ -e "./packages/$community/$profile/PACKAGES" ] && {
@@ -62,10 +62,10 @@ for community_org in $(ls ./network-profiles); do
             -e "s/{{ profile }}/$profile/g" \
             -e "s/{{ packages }}/$packages/g" \
             "./templates/Makefile.profile" >> "./packages/$community/Makefile"
+        done
     done
-done
 
-(cd sdk && \
-       ./scripts/feeds update -a && \
-       ./scripts/feeds install -p networkprofiles -a && \
-       make -j 4)
+    (cd sdk && \
+        ./scripts/feeds update -a && \
+        ./scripts/feeds install -p networkprofiles -a && \
+        make -j 4)
