@@ -44,7 +44,7 @@ for community_org in $(ls ./network-profiles); do
 
         # copy all profile specific files
         cp -r "./network-profiles/$community_org/$profile_org/" \
-            "./packages/$community/$profile"
+            "./packages/$community/"
 
         # if special packages are required for the profile parse them here
         packages=""
