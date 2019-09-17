@@ -6,7 +6,7 @@
 # update the network-profiles
 
 touch .network_profiles_commit
-git --git-dir=network-profiles/.git/ pull
+git --git-dir=network-profiles/.git/ --work-tree=network-profiles/ pull
 latest_commit="$(git --git-dir=network-profiles/.git/ log --pretty=format:'%h' -n 1)"
 if [ "$latest_commit" != "$(cat .network_profiles_commit)" -o -n "$FORCE_REBUILD" ]; then
     echo "$latest_commit" > .network_profiles_commit
