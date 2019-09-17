@@ -51,7 +51,7 @@ for community_org in $(ls ./network-profiles); do
         [ -e "./packages/$community/$profile/PACKAGES" ] && {
             for p in $(cat ./packages/$community/$profile/PACKAGES); do
               # negative packages are discarted
-              packages="$packages $(echo -n "$p" | grep -v "^-")"
+              packages="$packages $(echo -n "+$p" | grep -v "^+-")"
             done
             # replace \n with a whiespace
             # packages="${packages//$'\n'/ }"

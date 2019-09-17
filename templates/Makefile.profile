@@ -4,7 +4,7 @@ define Package/{{ community }}-{{ profile }}
   TITLE:={{ profile }}
   URL:=https://github.com/libremesh/network-profiles/
   PKGARCH:=all
-  DEPENDS:=lime-system {{ packages }}
+  DEPENDS:=+lime-system {{ packages }}
   PROVIDES:=libremesh-profile
 endef
 
