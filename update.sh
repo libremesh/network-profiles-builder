@@ -43,7 +43,7 @@ for community_org in $(ls ./network-profiles); do
         profile="$(echo $profile_org | sed -e s/[^A-Za-z0-9\-]/_/g)"
 
         # copy all profile specific files
-        cp -rp "./network-profiles/$community_org/$profile_org/" \
+        rsync -a --delete "./network-profiles/$community_org/$profile_org" \
             "./packages/$community/"
 
         # if special packages are required for the profile parse them here
